@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃園智慧旅遊雲 即時影像串流</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #222;
+            color: #ddd;
+        }
+        div#content {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: auto;
+        }
+        div.fullpage-2x2-grid {
+            position: relative;
+            width: calc(50vw - 9px);
+            height: calc(50vh - 1.75px);
+        }
+        div.fullpage-2x2-grid select.camera-switcher {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+        }
+        div.fullpage-2x2-grid .title {
+            height: 26px;
+            margin: 0;
+        }
+        div.fullpage-2x2-grid .title a {
+            color: lightskyblue;
+        }
+        div.fullpage-2x2-grid iframe {
+            width: 100%;
+            height: calc(100% - 26px);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="content">
+            <div id="camera1" class="fullpage-2x2-grid">
+                <select id="cameraSwitcher1" class="camera-switcher"></select>
+                <h3 class="title"><span class="viewpoint-title"></span> (<a href="https://www.google.com/maps/place/24.811200, 121.244110" target="_blank">24°48'40.3"N 121°14'38.8"E</a>)</h3>
+                <iframe src="" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="camera2" class="fullpage-2x2-grid">
+                <select id="cameraSwitcher2" class="camera-switcher"></select>
+                <h3 class="title"><span class="viewpoint-title"></span> (<a href="https://www.google.com/maps/place/24.816280, 121.346840" target="_blank">24°48'58.6"N 121°20'48.6"E</a>)</h3>
+                <iframe src="" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="camera3" class="fullpage-2x2-grid">
+                <select id="cameraSwitcher3" class="camera-switcher"></select>
+                <h3 class="title"><span class="viewpoint-title"></span> (<a href="https://www.google.com/maps/place/24.790630, 121.375170" target="_blank">24°47'26.3"N 121°22'30.6"E</a>)</h3>
+                <iframe src="" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="camera4" class="fullpage-2x2-grid">
+                <select id="cameraSwitcher4" class="camera-switcher"></select>
+                <h3 class="title"><span class="viewpoint-title"></span> (<a href="https://www.google.com/maps/place/24.679820, 121.384070" target="_blank">24°40'47.4"N 121°23'02.7"E</a>)</h3>
+                <iframe src="" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </main>
+    <script>
+        const viewPoint = [
+            {
+                "name": "石門水庫",
+                "coordinate": "24.811200, 121.244110",
+                "title": "Shihmen Reservoir Live Cam 石門水庫即時影像",
+                "videoId": "1OTZ9rjFv78"
+            },
+            {
+                "name": "永安漁港",
+                "coordinate": "24.987720, 121.015790",
+                "title": "Yongan Fishing Harbor 永安漁港即時影像",
+                "videoId": "tD_a03trUvE"
+            },
+            {
+                "name": "大溪老街",
+                "coordinate": "24.886331, 121.285741",
+                "title": "Daxi Old Street Live Cam 大溪老街即時影像",
+                "videoId": "z_mlibCfgFI"
+            },
+            {
+                "name": "桃園大溪橋",
+                "coordinate": "24.884820, 121.283900",
+                "title": "Daxi Bridge Live Cam 桃園大溪橋即時影像",
+                "videoId": "FPfv3-dC1Po"
+            },
+            {
+                "name": "小烏來天空步道",
+                "coordinate": "24.790630, 121.375170",
+                "title": "Xiao Wulai Skywalk Live Cam 小烏來天空步道即時影像",
+                "videoId": "2NS-5SqvhkI"
+            },
+            {
+                "name": "小烏來寰宇平台",
+                "coordinate": "24.793139, 121.375389",
+                "title": "Taoyuan Panoramic Lookout Live Cam | 桃園小烏來寰宇平台即時影像",
+                "videoId": "-E8pophP1VQ"
+            },
+            {
+                "name": "拉拉山遊客中心",
+                "coordinate": "24.679820, 121.384070",
+                "title": "Lala Mount. Live Cam 拉拉山遊客中心即時影像",
+                "videoId": "Qsio6jOZ2Y4"
+            },
+            {
+                "name": "後慈湖",
+                "coordinate": "24.845540, 121.302250",
+                "title": "Back Cihu Live Cam 後慈湖即時影像",
+                "videoId": "TUt5wxrAtTc"
+            },
+            {
+                "name": "角板山生態池",
+                "coordinate": "24.816280, 121.346840",
+                "title": "Jiaobanshan Eco Pond Live Cam 角板山生態池即時影像",
+                "videoId": "D3RGBaU1uUY"
+            },
+            {
+                "name": "慈湖水岸廣場",
+                "coordinate": "24.840950, 121.294440",
+                "title": "Cihu Memorial Sculpture Park Live Cam 慈湖水岸廣場即時影像",
+                "videoId": "x6I-9UEe5PY"
+            },
+            {
+                "name": "虎頭山奧爾森林學堂",
+                "coordinate": "24.811200, 121.244110",
+                "title": "Hutoushan Owl Forest School Live Cam 虎頭山奧爾森林學堂即時影像",
+                "videoId": "_bEjElKSPCk"
+            },
+            {
+                "name": "角板山梅園",
+                "coordinate": "24.816370, 121.349270",
+                "title": "Jiaobanshan Plum Orchard Live Cam 角板山梅園即時影像",
+                "videoId": "E0-nfZjrMiE"
+            }
+        ];
+
+        function initCamera()
+        {
+            document.querySelectorAll('div.fullpage-2x2-grid').forEach(function(elm)
+            {
+                const ordinal = elm.id.replace(/^camera/, '');
+                const titleId = `div#${elm.id} h3.title span.viewpoint-title`;
+                const linkId = `div#${elm.id} h3.title a`;
+                const iframeId = `div#${elm.id} iframe`;
+                const localStorageKey = `Camera${ordinal}Index`;
+
+                let cameraIndex = localStorage.getItem(localStorageKey);
+                let i = Math.floor(cameraIndex === null ? Number(ordinal) - 1 : Number(cameraIndex));
+                if (i < 0) {
+                    i = 0;
+                } else if (i >= viewPoint.length) {
+                    i = viewPoint.length - 1;
+                }
+                let point = viewPoint[i];
+                let coordinate = point.coordinate.replace(' ', '');
+
+                document.querySelector(titleId).innerText = point.name;
+                document.querySelector(linkId).innerText = convertCoordinates(coordinate);
+                document.querySelector(linkId).href = `https://www.google.com/maps/place/${coordinate}`;
+                document.querySelector(iframeId).src = `https://www.youtube.com/embed/${viewPoint[i].videoId}?autoplay=1&mute=1`;
+                document.querySelector(iframeId).title = point.title;
+            });
+        }
+
+        function initCameraSwitcher()
+        {
+            document.querySelectorAll('select.camera-switcher').forEach(function(elm)
+            {
+                viewPoint.forEach(function(vp, n) {
+                    let vo = document.createElement('option');
+                    vo.value = n;
+                    vo.text = vp.name;
+                    elm.add(vo, null);
+                });
+
+                const ordinal = elm.id.replace(/^cameraSwitcher/, '');
+                const parentId = `camera${ordinal}`;
+                const titleId = `div#${parentId} h3.title span.viewpoint-title`;
+                const linkId = `div#${parentId} h3.title a`;
+                const iframeId = `div#${parentId} iframe`;
+                const localStorageKey = `Camera${ordinal}Index`;
+
+                let cameraIndex = localStorage.getItem(localStorageKey);
+                let i = Math.floor(cameraIndex === null ? Number(ordinal) - 1 : Number(cameraIndex));
+                if (i < 0) {
+                    i = 0;
+                } else if (i >= viewPoint.length) {
+                    i = viewPoint.length - 1;
+                }
+                elm.value = i;
+
+                elm.addEventListener('change', function(event)
+                {
+                    let point = viewPoint[elm.value];
+                    let coordinate = point.coordinate.replace(' ', '');
+
+                    localStorage.setItem(localStorageKey, elm.value);
+
+                    document.querySelector(titleId).innerText = point.name;
+                    document.querySelector(linkId).innerText = convertCoordinates(coordinate);
+                    document.querySelector(linkId).href = `https://www.google.com/maps/place/${coordinate}`;
+                    console.log(iframeId);
+                    document.querySelector(iframeId).src = `https://www.youtube.com/embed/${point.videoId}?autoplay=1&mute=1`;
+                    document.querySelector(iframeId).title = point.title;
+                });
+            });
+        }
+
+        function convertDecimalToDMS(decimal)
+        {
+            const sign = decimal >= 0 ? 1 : -1;
+
+            const absNumber = Math.abs(decimal);
+            let degree = Math.floor(absNumber);
+
+            const rawMinute = (absNumber - degree) * 60;
+            let minute = Math.floor(rawMinute);
+
+            let second = Math.round((rawMinute - minute) * 60 * 10) / 10;
+
+            if (second >= 60) {
+                second = 0;
+                minute += 1;
+            }
+            if (minute >= 60) {
+                minute = 0;
+                degree += 1;
+            }
+            degree *= sign;
+
+            return {
+                "degree": degree,
+                "minute": minute,
+                "second": second
+            };
+        }
+
+        function convertCoordinates(coordinatesString)
+        {
+            const [latitude, longitude] = coordinatesString.split(/, */).map(Number);
+            const [objLat, objLong] = [latitude, longitude].map(decimal => convertDecimalToDMS(decimal));
+
+            let latMark, longMark;
+
+            if (objLat.degree >= 0) {
+                latMark = 'N';
+            } else {
+                latMark = 'S';
+                objLat.degree *= -1;
+            }
+
+            if (objLong.degree >= 0) {
+                longMark = 'E';
+            } else {
+                longMark = 'W';
+                objLong.degree *= -1;
+            }
+
+            let latDegree = String(objLat.degree);
+            let latMinute = (objLat.minute < 10 ? '0' : '') + String(objLat.minute);
+            let latSecond = (objLat.second < 10 ? '0' : '') + String(objLat.second);
+
+            let longDegree = String(objLong.degree);
+            let longMinute = (objLong.minute < 10 ? '0' : '') + String(objLong.minute);
+            let longSecond = (objLong.second < 10 ? '0' : '') + String(objLong.second);
+
+            return `${latDegree}°${latMinute}'${latSecond}"${latMark}, ` +
+                   `${longDegree}°${longMinute}'${longSecond}"${longMark}`;
+        }
+
+        initCamera();
+        initCameraSwitcher();
+    </script>
+</body>
+</html>
